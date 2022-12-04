@@ -2,10 +2,10 @@ package main
 
 import (
 	"log"
-	"os"
-	"path"
 	"strconv"
 	"strings"
+
+	"github.com/salasberryfin/advent-of-code-2022/files"
 )
 
 //var file = "test-input"
@@ -83,16 +83,7 @@ func sum(slice []int) int {
 }
 
 func main() {
-	wd, err := os.Getwd()
-	if err != nil {
-		log.Panic("Failed to get filepath: ", err)
-	}
-	filepath := path.Join(wd, "day1", file)
-
-	content, err := os.ReadFile(filepath)
-	if err != nil {
-		log.Fatal("Failed to read file: ", err)
-	}
+	content := files.ReadFile(strings.Join([]string{"day1", file}, "-"))
 	splitContent := strings.Split(string(content), "\n\n")
 
 	sumCalories := []int{}
