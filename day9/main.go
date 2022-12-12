@@ -21,14 +21,14 @@ type coords [2]int
 
 type knots [10]coords
 
-func updateVisited(visited *[]coords, current coords) {
-	for _, i := range *visited {
+func updateVisited(visited []coords, current coords) []coords {
+	for _, i := range visited {
 		if i == current {
-			return
+			return visited
 		}
 	}
 
-	*visited = append(*visited, current)
+	return append(visited, current)
 }
 
 func manhattanDistance(old, current coords) int {
@@ -59,15 +59,17 @@ func moveHead(movement string, head coords) coords {
 	return headPos
 }
 
-func updateTail(head, oldHead, tail *coords) {
+func updateTail(head, oldHead, tail coords) coords {
 	if head[0] != tail[0] && head[1] != tail[1] {
 		// only move diagonally if more than two steps away
-		if manhattanDistance(*tail, *head) > 2 {
-			*tail = *oldHead
+		if manhattanDistance(tail, head) > 2 {
+			tail = oldHead
 		}
 	} else {
-		*tail = *oldHead
+		tail = oldHead
 	}
+
+	return tail
 }
 
 func main() {
@@ -85,18 +87,13 @@ func main() {
 		if err != nil {
 			log.Fatal("Failed to convert string to integer: ", err)
 		}
-		//oldTail := tail
 		for k := 0; k < number; k++ {
 			oldHead := head
 			head = moveHead(direction, head)
 			if manhattanDistance(tail, head) > 1 {
-				updateTail(&head, &oldHead, &tail)
-				updateVisited(&visited, tail)
-			} else {
-				//fmt.Printf("Tail is stil next to head\n")
-				//oldTail = tail
+				tail = updateTail(head, oldHead, tail)
+				visited = updateVisited(visited, tail)
 			}
-			//fmt.Printf("tail position is %v\n", tail)
 		}
 	}
 	fmt.Printf("Last head position is %v\n", head)
