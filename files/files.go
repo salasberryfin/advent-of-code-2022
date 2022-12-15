@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"path"
+	"strings"
 )
 
 var (
@@ -23,14 +24,14 @@ func buildPath(filename string) string {
 
 // ReadFile reads a file from the "input-files" folder and returns its content
 // allowing to easily get input data
-func ReadFile(filename string) []byte {
+func ReadFile(filename string) string {
 	filepath := buildPath(filename)
 	content, err := os.ReadFile(filepath)
 	if err != nil {
 		log.Fatal("Failed to read file content: ", err)
 	}
 
-	return content
+	return strings.TrimSpace(string(content))
 }
 
 // ReadFileByLine reads a file line by line from the "input-folder"
